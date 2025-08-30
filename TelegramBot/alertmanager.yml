@@ -1,0 +1,21 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'telegram-bot'
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+
+receivers:
+  - name: 'telegram-bot'
+    telegram_configs:
+      - bot_token: '8458075674:AAGeoXw1k-xdAWNMydrXPclJN3XVBQAx3jM'
+        chat_id: 1718388445       
+        parse_mode: 'Markdown'
+        send_resolved: true
+        message: |-
+          🚨 *ALERT*: {{ .Labels.alertname }}
+          📌 Instance: {{ .Labels.instance | default "N/A" }}
+          📝 Summary: {{ .Annotations.summary | default "No summary" }}
+          🔎 Description: {{ .Annotations.description | default "No description" }}

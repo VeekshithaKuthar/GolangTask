@@ -1,0 +1,22 @@
+groups:
+  - name: users-service.rules
+    rules:
+      # Debug rule - always fires
+      - alert: TestTelegram
+        expr: vector(1)
+        for: 1s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Test Telegram Alert"
+          description: "This is a test message to verify Alertmanager → Telegram integration."
+
+      # Real rule - fires if >10 requests/minute to /ping
+      - alert: HighPingRequestRate
+        expr: sum(increase(http_requests_total{path="/ping", method="GET"}[30s])) > 1
+        for: 5s
+        labels:
+          severity: critical
+        annotations:
+          summary: "High request rate on /ping"
+          description: "More than 10 GET /ping requests in 1 minute (value: {{ $value }})"
